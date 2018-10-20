@@ -1,0 +1,42 @@
+<!--
+  Generated template for the SetupPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Setup</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>URL</ion-label>
+      <ion-input [(ngModel)]='connSettings.Url'  type="text" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Username</ion-label>
+      <ion-input [(ngModel)]='connSettings.UserId' type="text" ></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input [(ngModel)]='connSettings.UserPwd'  type="password" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <button ion-button color="secondary" block on-click='Test_onClick()' >Test</button>
+    </ion-item>
+    <ion-item>
+      <button ion-button color="primary" block on-click='Save_onClick()'>Save</button>
+    </ion-item>
+  
+  </ion-list>
+</ion-content>

@@ -1,0 +1,12 @@
+{
+  "name": "ess-app",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://77.78.103.112:3001/ZingApi/api"
+    }]
+}

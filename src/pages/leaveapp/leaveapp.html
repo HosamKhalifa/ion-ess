@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+
+      <p padding-left color="amber"> {{emp.Name}} Leaves</p>
+    </ion-title>
+
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      Leaves
+    </ion-list-header>
+     
+      <ion-card *ngFor="let item of empList" (click)="onItemClicked(item)">
+        <ion-card-header >
+          <ion-item>
+          Id :{{item.ApplicationId}} <ion-icon name="create" item-right color="amber" ></ion-icon>
+        </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+          From :{{item.ScheduledLeaveDate| date:'yyy-MMM-dd' }} To : {{item.ScheduledReturnDate| date:'yyy-MMM-dd' }}<br>
+          Details :{{item.Comments}}<br>
+          Approver:<ion-label color="danger">{{item.CommentsApproval}}</ion-label>
+        </ion-card-content>
+      </ion-card>
+  </ion-list>
+</ion-content>
