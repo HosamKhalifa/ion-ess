@@ -10,7 +10,7 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import{SetupPage}from '../pages/setup/setup';
 import {LeaveappPage} from '../pages/leaveapp/leaveapp';
-
+import{LeaveappLinePage} from '../pages/leaveapp-line/leaveapp-line';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -20,7 +20,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     ListPage,
     SetupPage,
-    LeaveappPage
+    LeaveappPage,
+    LeaveappLinePage
   ],
   imports: [
     BrowserModule,
@@ -35,7 +36,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     ListPage,
     SetupPage,
-    LeaveappPage
+    LeaveappPage,
+    LeaveappLinePage
   ],
   providers: [
     StatusBar,

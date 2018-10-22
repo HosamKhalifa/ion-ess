@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, DateTime } from 'ionic-angular';
 import {LeaveApp} from '../../app/models/leaveapp';
 import {Employee} from '../../app/models/employee';
 import * as Constants from '../../app/models/constants';
@@ -9,6 +9,8 @@ import{AlertController} from 'ionic-angular';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ConnSettings } from '../../app/models/connsettings';
 import { LoadingController,Loading } from 'ionic-angular';
+import { AppType,AppStatus,VisaType } from '../../app/models/enums';
+import {LeaveappLinePage} from '../leaveapp-line/leaveapp-line';
 
 
 @IonicPage()
@@ -46,6 +48,14 @@ export class LeaveappPage implements OnInit{
     
     
   }
+  //Enums stings array
+  appType:Array<string>=AppType.ToStr();
+  
+  appStatus:Array<string>=AppStatus.ToStr();
+
+  visaType:Array<string>=VisaType.ToStr();
+  selectedVisaType:string=VisaType.None;
+
   emp:Employee=new Employee();
   emplId:string="";
   connSettings:ConnSettings=new ConnSettings();
@@ -58,6 +68,22 @@ export class LeaveappPage implements OnInit{
   onItemClicked( item:LeaveApp){
     console.log(`Id :${item.ApplicationId} was clicked`);
     this.presentConfirm();
+  }
+  onAddItemClicked(){
+    
+    let  newItem:LeaveApp=new LeaveApp();
+    //Initalization
+    newItem.CreatedDateTime=new Date();
+    newItem.ApprovalStatus=AppStatus.Open;
+    newItem.LeaveApplicationType=AppType.Leave;
+    newItem.ExitVisaType=VisaType.None;
+    newItem.ScheduledLeaveDate=new Date();
+    newItem.ScheduledReturnDate=new Date();
+    console.log(`Create new leave : ${newItem} `);
+    this.navCtrl.push(LeaveappLinePage,{
+      Operation:"NEW",
+      Item:newItem
+      });
   }
 
  getLeaves(_empl:Employee){
