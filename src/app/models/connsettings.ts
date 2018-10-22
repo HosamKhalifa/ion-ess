@@ -6,7 +6,7 @@ export class ConnSettings{
                 public UserPwd:string='',
                 public Url:string='',
                 public CompId:string='',
-                public CompImage:ImageData=null
+                public CompImage=null
                 
     ){}
    

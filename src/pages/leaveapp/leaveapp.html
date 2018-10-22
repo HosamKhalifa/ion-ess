@@ -33,10 +33,11 @@
         </ion-item>
       </ion-card-header>
       <ion-card-content>
-        From :{{item.ScheduledLeaveDate| date:'yyyy-MMM-dd' }} To : {{item.ScheduledReturnDate| date:'yyyy-MMM-dd' }}<br>
-
+        Name  : {{item.EmplId}} &nbsp;{{item.EmplName}}<br>
+        Branch: {{item.BranchName}}
+        From  : {{item.ScheduledLeaveDate| date:'yyyy-MMM-dd' }} To : {{item.ScheduledReturnDate| date:'yyyy-MMM-dd' }}<br>
+        Leave : {{item.DefaultLeaveCode}} &nbsp; Ticket Req? : {{item.TicketReservationRequired}}
         Details :{{item.Comments}}<br>
-
         Approver:<ion-label color="danger">{{item.CommentsApproval}}</ion-label><br>
 
 

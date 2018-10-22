@@ -19,19 +19,25 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-      <ion-label floating>URL</ion-label>
+      <ion-label floating color="primary">URL</ion-label>
       <ion-input [(ngModel)]='connSettings.Url'  type="text" ></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating>Username</ion-label>
+      <ion-label floating color="primary">Username</ion-label>
       <ion-input [(ngModel)]='connSettings.UserId' type="text" ></ion-input>
     </ion-item>
   
     <ion-item>
-      <ion-label floating>Password</ion-label>
+      <ion-label floating color="primary">Password</ion-label>
       <ion-input [(ngModel)]='connSettings.UserPwd'  type="password" ></ion-input>
     </ion-item>
     <ion-item>
+        <ion-label floating color="primary">Company Id</ion-label>
+        <ion-input [(ngModel)]="connSettings.CompId" type="text"></ion-input>
+      </ion-item>
+
+    <ion-item>
+      
       <button ion-button color="secondary" block on-click='Test_onClick()' >Test</button>
     </ion-item>
     <ion-item>

@@ -9,12 +9,7 @@ import { Storage } from '@ionic/storage';
 import * as Constants from '../../app/models/constants';
 
 
-/**
- * Generated class for the SetupPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @IonicPage()
 @Component({
@@ -41,7 +36,25 @@ export class SetupPage implements OnInit{
     this.storage.get(Constants.SETTINGS_EMPL).then((val)=>{
       console.log('Sotred Employee',val);
       this.currentEmployee=val;
-    })
+    });
+    this.storage.get(Constants.SETTINGS_COMP_ID).then((val) =>{
+      console.log('Stored Comp ID:',val);
+      if(val != null  )this.connSettings.CompId=val; 
+      else
+      {
+        this.connSettings.CompId='dat';
+        this.storage.set(Constants.SETTINGS_COMP_ID,'dat');
+      } 
+    });    
+    this.storage.get(Constants.SETTINGS_LOGO).then((val)=>{
+      console.log('Stored Company logo ',val);
+      if (val != null )this.connSettings.CompImage=val;
+      else 
+      {
+        this.connSettings.CompImage='';
+        this.storage.set(Constants.SETTINGS_COMP_ID,'!');        
+      }
+    });    
     
   }
 
@@ -55,7 +68,7 @@ export class SetupPage implements OnInit{
   ionViewDidLoad() {
     console.log('ionViewDidLoad SetupPage');
   }
-  connSettings:ConnSettings=new ConnSettings('','',''); 
+  connSettings:ConnSettings=new ConnSettings('','','',''); 
   currentEmployee:Employee=new Employee();
   
   Test_onClick(){
@@ -66,10 +79,17 @@ export class SetupPage implements OnInit{
   Save_onClick(){
     console.log(' URL =>',this.connSettings.Url,' UserId =>',this.connSettings.UserId);
     console.log('Employee data Name:',this.currentEmployee.Name);
-    this.storage.set(Constants.SETTINGS_URL,this.connSettings.Url);
+    this.storage.set(Constants.SETTINGS_URL,this.connSettings.Url).then(()=>{
+      this.http.get(`${this.connSettings.Url}/companyinfo/${this.connSettings.CompId}`).map(res => res.toString()).subscribe(data => {
+        this.connSettings.CompImage=data;
+        this.storage.set(Constants.SETTINGS_LOGO,data);
+      })
+    });
     this.storage.set(Constants.SETTINGS_USERID,this.connSettings.UserId);
     this.storage.set(Constants.SETTINGS_USERPWD,this.connSettings.UserPwd);
     this.storage.set(Constants.SETTINGS_EMPL,this.currentEmployee);
+    this.storage.set(Constants.SETTINGS_COMP_ID,this.connSettings.CompId);
+    this.storage.set(Constants.SETTINGS_LOGO,this.connSettings.CompImage);
   }
   TestConn(connSettings:ConnSettings){
     

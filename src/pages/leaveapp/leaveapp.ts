@@ -97,7 +97,7 @@ export class LeaveappPage implements OnInit{
          
         this.empList=data;
         this.empList.forEach(item => {
-          console.log(`Id:${item.ApplicationId} \n Empl:${item.ScheduledLeaveDate}`);
+          console.log(`Id:${item.ApplicationId} \n Empl:${item.EmplName}`);
         });
         console.log(`Data returned from API:\n ${this.empList}`);
         },err =>{
