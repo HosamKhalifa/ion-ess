@@ -6,11 +6,13 @@ import * as Constants from '../../app/models/constants';
 import {Http} from '@angular/http';
 import { Storage } from '@ionic/storage';
 import{AlertController} from 'ionic-angular';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 import { ConnSettings } from '../../app/models/connsettings';
+import {CrudApiProvider } from '../../providers/crud-api/crud-api';
 import { LoadingController,Loading } from 'ionic-angular';
 import { AppType,AppStatus,VisaType } from '../../app/models/enums';
 import {LeaveappLinePage} from '../leaveapp-line/leaveapp-line';
+import { LeaveCode } from '../../app/models/leavecode';
 
 
 @IonicPage()
@@ -28,6 +30,7 @@ export class LeaveappPage implements OnInit{
           this.emp=employeeObj;    
           
           this.getLeaves(this.emp);//Calling API
+          this.crudApi.getLeaveCodes(this.leaveCodeList);
           });
 
     });
@@ -40,11 +43,14 @@ export class LeaveappPage implements OnInit{
               private http:Http,
               private alertCtrl:AlertController,
               private storage: Storage,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+              public crudApi:CrudApiProvider) {
   }
 
   ionViewDidLoad() {
+    
     console.log('ionViewDidLoad LeaveappPage Employee name:',this.emp.Name);
+  
     
     
   }
@@ -60,6 +66,7 @@ export class LeaveappPage implements OnInit{
   emplId:string="";
   connSettings:ConnSettings=new ConnSettings();
   empList:Array<LeaveApp>;
+  leaveCodeList:Array<LeaveCode>;
   loader:Loading = this.loadingCtrl.create({
     content: "Please wait...",
     duration: 3000

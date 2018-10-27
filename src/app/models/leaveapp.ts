@@ -7,22 +7,22 @@ export class LeaveApp {
     public RecId:number;
     public ApplicationId:string;
     public CreatedDateTime:Date;
-    public LeaveApplicationType:string;
-    public DefaultLeaveCode:string;
+    public LeaveApplicationType:string; //UI RO Always=Leave
+    public DefaultLeaveCode:string; //UI  
     public AdminStatus:string;
-    public LeaveEncashment:string;
-    public EmplId:string; 
-    public EmplName:string;
-    public BranchName:string;
-    public RequestedBy:number;
-    public ScheduledLeaveDate:Date;
-    public ScheduledReturnDate:Date;
-    public Days:number;
-    public ApprovalStatus:string;
-    public TicketReservationRequired:string;	
-    public NeedExitVisa:string;
+    public LeaveEncashment:string;//UI
+    public EmplId:string; //UI RO
+    public EmplName:string; //UI RO
+    public BranchName:string; //UI RO
+    public RequestedBy:number; 
+    public ScheduledLeaveDate:Date; //UI 
+    public ScheduledReturnDate:Date;//UI
+    public Days:number; 
+    public ApprovalStatus:string; 
+    public TicketReservationRequired:string;	//UI
+    public NeedExitVisa:string; //UI
     public ExitVisaType:string;
-    public Comments:string;
+    public Comments:string; //UI
     public CommentsApproval:string;
     
     

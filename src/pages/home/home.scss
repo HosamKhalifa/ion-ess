@@ -12,4 +12,11 @@ page-home {
        
     
       }
+      ion-avatar,
+      ion-avatar > img{
+          border-radius:50%;
+          margin:auto ;
+          height:12rem;
+          width:12rem;
+      }      
 }

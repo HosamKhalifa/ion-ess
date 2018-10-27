@@ -1,9 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import{FormsModule} from '@angular/forms';
+import{FormBuilder,FormGroup} from '@angular/forms';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import {HttpModule} from '@angular/http';
+
+import { HttpModule } from '@angular/http';
+import{HttpClientModule} from '@angular/common/http';
+
 import { IonicStorageModule } from '@ionic/storage';
+import {CrudApiProvider} from '../providers/crud-api/crud-api';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -13,6 +17,7 @@ import {LeaveappPage} from '../pages/leaveapp/leaveapp';
 import{LeaveappLinePage} from '../pages/leaveapp-line/leaveapp-line';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 
 @NgModule({
   declarations: [
@@ -25,10 +30,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpModule,    
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    FormsModule
+    FormBuilder,
+    FormGroup
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -42,7 +49,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
+    
+    {provide:CrudApiProvider, useClass:CrudApiProvider },
     {provide: ErrorHandler, useClass: IonicErrorHandler}
+    
   ]
 })
 export class AppModule {}
