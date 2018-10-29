@@ -3,10 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { LeaveCode } from '../../app/models/leavecode';
 //import { Loading } from 'ionic-angular';
-import { ConnSettings } from '../../app/models/connsettings';
-import { Storage } from '@ionic/storage';
-import * as Constants from '../../app/models/constants'
-import { Employee } from '../../app/models/employee';
+//import{SingletonService} from '../../services/singleton/singleton';
+import{GlobalProvider} from '../../providers/global/global';
 
 
 @Injectable()
@@ -17,42 +15,27 @@ export class CrudApiProvider implements OnInit{
   }
 
   constructor(public http: HttpClient,
-              public storage:Storage
-             // public connSettings:ConnSettings
-             
+              public global:GlobalProvider
               ) {
-    console.log('Hello CrudApiProvider Provider');
-    this.connSettings = new ConnSettings();
-    
-    this.storage.get(Constants.SETTINGS_URL).then((val)=>{
-      console.log(`Crud-Api Constructor : \n Url:  ${val}`);
-      
-      this.connSettings.Url=val;
-
-        this.storage.get(Constants.SETTINGS_EMPL).then((employeeObj)=>{
-          this.emp=employeeObj;    
-          this.getLeaveCodes( this.leaveCodes);
-         
-          });
-
-    });
+   
   }
 
-  connSettings:ConnSettings;
-  emp:Employee;
-  leaveCodes:Array<LeaveCode>;
-  getLeaveCodes(leaveCodes:Array<LeaveCode>,url:string=this.connSettings.Url){
-   
+  
+  
+  getLeaveCodes(url:string=this.global.URL){
+    
     let fullURL:string = `${url}/leavecodes`;
-    console.log(`URL : ${fullURL}`);
+    console.log(`CrudApi.getLeaveCodes URL === : ${fullURL}`);
    // this.loader.present( );
     this.http.get<Array<LeaveCode>>(fullURL)
         .map(res => res)
         .subscribe(data => {
            
-          leaveCodes=data;
-          data.forEach(leaveCodeLine => {
-            console.log(`CodeId:${leaveCodeLine.CodeId}  Description:${leaveCodeLine.Description}`);
+          let leaveCodes:Array<LeaveCode>=data;
+          this.global.LeaveCodes = leaveCodes;
+          leaveCodes.forEach(leaveCodeLine => {
+          
+           console.log(`CodeId:${leaveCodeLine.CodeId}  Description:${leaveCodeLine.Description}`);
           });
           console.log(`Leave code count from API:\n ${data.length}`);
           },err =>{

@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import {FormGroup,FormControl,Validator, FormBuilder, Validators} from '@angular/forms';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { LeaveApp } from '../../app/models/leaveapp';
+import{Http} from '@angular/http';
+import { LeaveCode } from '../../app/models/leavecode';
+import { AppType,AppStatus,VisaType } from '../../app/models/enums';
+import {GlobalProvider} from '../../providers/global/global';
+
 
 
 
@@ -11,13 +17,61 @@ import { LeaveApp } from '../../app/models/leaveapp';
 })
 export class LeaveappLinePage implements OnInit {
   ngOnInit(): void {
-    console.log(`Operation : ${this.navParams.data.Operation} \n LeaveApp : ${this.navParams.data.Item}`);
-    if(this.navParams.get("Operation").toString()=== "NEW"){
-      this.line=this.navParams.data.Item;
-   };
+    
+    this.line = this.navParams.data.Item? this.navParams.data.Item:null;
+  
+      console.log(`New Line from Params ${this.line}`);
+/*
+      this.signupform = new FormGroup({
+        username: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(10)]),
+        password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]),
+        name: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.minLength(4), Validators.maxLength(30)]),
+        email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      });   
+      //==========================================================
+ */     
+      this.tomorrow.setDate( new Date().getDate() + 1);
+      this.lineFG =  this.formBuilder.group({
+        DefaultLeaveCode:new FormControl('Absence',[Validators.required,Validators.minLength(2)]) ,  //['value',Validators.required],
+        CreatedDateTime:new FormControl(new Date().toISOString(),[Validators.required]),//['value',Validators.required],
+        ScheduledLeaveDate:new FormControl(new Date().toISOString(),[Validators.required]),//[this.toDay,Validators.required],
+        ScheduledReturnDate:new FormControl(this.tomorrow.toISOString(),[Validators.required]),//['value',Validators.required],
+        LeaveEncashment:new FormControl(false,[]),//['value'],
+        // EmplId:['value'],
+        // EmplName:['value'],
+        // BranchName:['value'],
+        TicketReservationRequired:new FormControl(false,[]),//['value'],
+        NeedExitVisa:new FormControl(false,[]),//['value'],
+        ExitVisaType:new FormControl(false,[]),//['value'],
+        Comments:new FormControl('Leave comment here',[Validators.required,Validators.minLength(5)]) //['value']
+      })    ;   
+    
+    //get leavecodelist
+    
+    this.leaveCodeList=this.global.LeaveCodes;
+    console.log(`LeaveCodeList from Global variable instance ${this.global.LeaveCodes.length} rows`);
+   if(this.leaveCodeList){
+      this.leaveCodeList.forEach((x)=>{
+        console.log(`Leave code list from params: ${x.Description}  `);
+      }) ;
+    
+   }else{console.log('LEAVECODELIST is not passed correctly ');}
+    console.log(`Operation : ${this.navParams.data.Operation} \n LeaveApp : ${this.navParams.data.Item.CreatedDateTime}`);
+   
+   
+  
+  
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams,
+              public formBuilder:FormBuilder,
+              public http:Http,
+              public global:GlobalProvider
+              ) {
+                
+           
+       
    
     
   }
@@ -27,10 +81,16 @@ export class LeaveappLinePage implements OnInit {
     
     
   }
-
+  //Properties
+  lineFG:FormGroup;
   line:LeaveApp;
-
-  
+  tomorrow =new Date();
+  leaveCodeList:Array<LeaveCode>;
+  post(){
+    //Validate all relative fields value
+    console.log(this.lineFG.value); 
+    
+  }
 
 
 }

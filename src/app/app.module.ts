@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import{FormBuilder,FormGroup} from '@angular/forms';
+
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { HttpModule } from '@angular/http';
@@ -8,7 +8,7 @@ import{HttpClientModule} from '@angular/common/http';
 
 import { IonicStorageModule } from '@ionic/storage';
 import {CrudApiProvider} from '../providers/crud-api/crud-api';
-
+import { SingletonService } from '../services/singleton/singleton';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
@@ -17,6 +17,7 @@ import {LeaveappPage} from '../pages/leaveapp/leaveapp';
 import{LeaveappLinePage} from '../pages/leaveapp-line/leaveapp-line';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { GlobalProvider } from '../providers/global/global';
 
 
 @NgModule({
@@ -27,15 +28,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SetupPage,
     LeaveappPage,
     LeaveappLinePage
+    
+    
   ],
   imports: [
     BrowserModule,
     HttpModule,    
     HttpClientModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot(),
-    FormBuilder,
-    FormGroup
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -49,9 +50,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
-    
+    SingletonService,
     {provide:CrudApiProvider, useClass:CrudApiProvider },
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    GlobalProvider
     
   ]
 })

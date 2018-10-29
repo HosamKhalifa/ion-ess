@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import{ConnSettings} from '../../app/models/connsettings';
+import{SingletonService} from '../../services/singleton/singleton';
 import 'rxjs/add/operator/map';
 import {Employee} from '../../app/models/employee';
 import{AlertController} from 'ionic-angular';
@@ -62,13 +63,14 @@ export class SetupPage implements OnInit{
               public navParams: NavParams,
               private http:Http,
               private alertCtrl:AlertController,
-              private storage: Storage) {
+              private storage: Storage,
+              public singleton:SingletonService) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SetupPage');
   }
-  connSettings:ConnSettings=new ConnSettings('','','',''); 
+  connSettings:ConnSettings; 
   currentEmployee:Employee=new Employee();
   
   Test_onClick(){
@@ -90,6 +92,10 @@ export class SetupPage implements OnInit{
     this.storage.set(Constants.SETTINGS_EMPL,this.currentEmployee);
     this.storage.set(Constants.SETTINGS_COMP_ID,this.connSettings.CompId);
     this.storage.set(Constants.SETTINGS_LOGO,this.connSettings.CompImage);
+
+    this.storage.set(Constants.SETTINGS,this.connSettings);
+    //Refersh global variables 
+    this.singleton.connSettings= this.connSettings;
   }
   TestConn(connSettings:ConnSettings){
     

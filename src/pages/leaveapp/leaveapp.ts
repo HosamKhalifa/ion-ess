@@ -6,6 +6,7 @@ import * as Constants from '../../app/models/constants';
 import {Http} from '@angular/http';
 import { Storage } from '@ionic/storage';
 import{AlertController} from 'ionic-angular';
+import{GlobalProvider} from '../../providers/global/global';
 
 import { ConnSettings } from '../../app/models/connsettings';
 import {CrudApiProvider } from '../../providers/crud-api/crud-api';
@@ -13,6 +14,7 @@ import { LoadingController,Loading } from 'ionic-angular';
 import { AppType,AppStatus,VisaType } from '../../app/models/enums';
 import {LeaveappLinePage} from '../leaveapp-line/leaveapp-line';
 import { LeaveCode } from '../../app/models/leavecode';
+
 
 
 @IonicPage()
@@ -23,17 +25,10 @@ import { LeaveCode } from '../../app/models/leavecode';
 export class LeaveappPage implements OnInit{
   ngOnInit(): void {
    
-    this.storage.get(Constants.SETTINGS_URL).then((val)=>{
-      this.connSettings.Url=val;
+    this.connSettings = this.global.connSettings;
+    this.getLeaves(this.global.CURR_EMPLOYEE);//Calling API
+    //this.crudApi.getLeaveCodes(this.leaveCodeList,this.global.URL);
 
-        this.storage.get(Constants.SETTINGS_EMPL).then((employeeObj)=>{
-          this.emp=employeeObj;    
-          
-          this.getLeaves(this.emp);//Calling API
-          this.crudApi.getLeaveCodes(this.leaveCodeList);
-          });
-
-    });
    
 
   }
@@ -44,14 +39,13 @@ export class LeaveappPage implements OnInit{
               private alertCtrl:AlertController,
               private storage: Storage,
               public loadingCtrl: LoadingController,
-              public crudApi:CrudApiProvider) {
+              public crudApi:CrudApiProvider,
+              public global:GlobalProvider) {
   }
 
   ionViewDidLoad() {
     
-    console.log('ionViewDidLoad LeaveappPage Employee name:',this.emp.Name);
-  
-    
+    console.log(`Global EmplId : ${this.global.EMPL_ID}\nGlobal LeaveCodes: ${this.global.LeaveCodes}`);
     
   }
   //Enums stings array
@@ -86,16 +80,18 @@ export class LeaveappPage implements OnInit{
     newItem.ExitVisaType=VisaType.None;
     newItem.ScheduledLeaveDate=new Date();
     newItem.ScheduledReturnDate=new Date();
-    console.log(`Create new leave : ${newItem} `);
+    this.leaveCodeList = this.global.LeaveCodes;
+    console.log(`Create new leave : ${newItem} \n New leave CodesList: ${this.leaveCodeList}`);
     this.navCtrl.push(LeaveappLinePage,{
       Operation:"NEW",
-      Item:newItem
+      Item:newItem,
+      LeaveCodeList:this.leaveCodeList
       });
   }
 
  getLeaves(_empl:Employee){
    
-  let fullURL:string = `${this.connSettings.Url}/leaves?emplid=${_empl.PersonnelNumber}&includeSubordinates=false`;
+  let fullURL:string = `${this.global.URL}/leaves?emplid=${_empl.PersonnelNumber}&includeSubordinates=false`;
   console.log(`URL : ${fullURL}`);
   this.loader.present( );
   this.http.get(fullURL)

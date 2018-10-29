@@ -35,7 +35,7 @@ export class ApiService implements OnInit{
   }
 
   
-  connSettings:ConnSettings=new ConnSettings('','',''); 
+  connSettings:ConnSettings=new ConnSettings(); 
   
   
  

@@ -3,13 +3,19 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import {GlobalProvider} from '../providers/global/global';
+import {ConnSettings} from '../app/models/connsettings';
+import { Storage } from '@ionic/storage';
+import * as Constants from '../app/models/constants';
+import{CrudApiProvider} from '../providers/crud-api/crud-api';
+
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { SetupPage } from '../pages/setup/setup';
 import { LeaveappPage }from '../pages/leaveapp/leaveapp';
-import{ERequestPage} from '../pages/e-request/e-request';
-import{OvertimePage} from '../pages/overtime/overtime';
-import{HoursleavePage} from '../pages/hoursleave/hoursleave';
+import {ERequestPage} from '../pages/e-request/e-request';
+import {OvertimePage} from '../pages/overtime/overtime';
+import {HoursleavePage} from '../pages/hoursleave/hoursleave';
 
 
 @Component({
@@ -22,7 +28,12 @@ export class MyApp {
 
   pages: Array<{title: string, component: any,icon:string,color:string}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, 
+              public statusBar: StatusBar, 
+              public splashScreen: SplashScreen,
+              public global:GlobalProvider,
+              public crudApi:CrudApiProvider,
+              public storage:Storage ) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -38,11 +49,35 @@ export class MyApp {
     ];
 
   }
+  connSettings:ConnSettings;
+
+  loadSettings(){
+    console.log('Starting to read saved settings into Global\n===============================================\n===============================================');
+    this.connSettings= new ConnSettings();
+    this.storage.get(Constants.SETTINGS).then((val) => {
+      console.log('Stored Connection settings :  ', val);
+      this.connSettings=val;    
+      this.global.connSettings=this.connSettings;
+      this.crudApi.getLeaveCodes(this.global.URL);//This method will save output on Global.leavCodes
+     
+    });
+
+    this.storage.get(Constants.SETTINGS_EMPL).then((val)=>{
+      console.log('Sotred Employee',val);
+      this.global.CURR_EMPLOYEE=val;
+    });
+     
+  }
 
   initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      
+      //Reading saved settings and load it on singleton service to be avilable to all pages
+      console.log('APP initialization starting ...');
+      this.loadSettings();
+
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
