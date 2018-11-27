@@ -1,9 +1,15 @@
 export class Employee{
-    constructor(public PersonnelNumber:string='',
+    constructor(public Worker:number=0,
+                public EmplId:string='',
                 public Name:string='',
-                public Worker:number=0,
-                public EmplCompany:string='' ){
+                public EmplCompany:string='',
+                public BranchName:string='',
+                public FullName:string='',
+                public EmplImg:any=null ){
 
     }
+
+    
+
 
 }

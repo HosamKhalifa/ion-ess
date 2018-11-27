@@ -35,7 +35,7 @@ export class SetupPage implements OnInit{
     });  
 
     this.storage.get(Constants.SETTINGS_EMPL).then((val)=>{
-      console.log('Sotred Employee',val);
+      console.log('Sotred Employee',val,val.EmplImg);
       this.currentEmployee=val;
     });
     this.storage.get(Constants.SETTINGS_COMP_ID).then((val) =>{
@@ -109,8 +109,10 @@ export class SetupPage implements OnInit{
             let alert = this.alertCtrl.create({
                 title:"Connection test",
                 subTitle:`connect to Url : ${fullURL} return <br> 
-                          Personnel number: ${this.currentEmployee.PersonnelNumber} <br>
-                          Name : ${this.currentEmployee.Name} `,
+                          Personnel number: ${this.currentEmployee.EmplId} <br>
+                          Name : ${this.currentEmployee.Name} <br>
+                          BranchName: ${this.currentEmployee.BranchName} <br>
+                          FullName: ${this.currentEmployee.FullName}`,
                 buttons:['Dismiss']          
 
             });

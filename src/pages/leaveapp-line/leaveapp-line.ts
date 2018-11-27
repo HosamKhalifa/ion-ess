@@ -34,16 +34,17 @@ export class LeaveappLinePage implements OnInit {
       this.lineFG =  this.formBuilder.group({
         DefaultLeaveCode:new FormControl('Absence',[Validators.required,Validators.minLength(2)]) ,  //['value',Validators.required],
         CreatedDateTime:new FormControl(new Date().toISOString(),[Validators.required]),//['value',Validators.required],
-        ScheduledLeaveDate:new FormControl(new Date().toISOString(),[Validators.required]),//[this.toDay,Validators.required],
+        ScheduledLeaveDate:new FormControl(this.tomorrow.toISOString(),[Validators.required]),//[this.toDay,Validators.required],
         ScheduledReturnDate:new FormControl(this.tomorrow.toISOString(),[Validators.required]),//['value',Validators.required],
         LeaveEncashment:new FormControl(false,[]),//['value'],
         // EmplId:['value'],
         // EmplName:['value'],
         // BranchName:['value'],
+        
         TicketReservationRequired:new FormControl(false,[]),//['value'],
         NeedExitVisa:new FormControl(false,[]),//['value'],
         ExitVisaType:new FormControl(false,[]),//['value'],
-        Comments:new FormControl('Leave comment here',[Validators.required,Validators.minLength(5)]) //['value']
+        Comments:new FormControl('',[Validators.required,Validators.minLength(5)]) //['value']
       })    ;   
     
     //get leavecodelist
@@ -88,8 +89,29 @@ export class LeaveappLinePage implements OnInit {
   leaveCodeList:Array<LeaveCode>;
   post(){
     //Validate all relative fields value
-    console.log(this.lineFG.value); 
+    console.log('Post new:',this.lineFG.value); 
+    var url = `${this.global.URL}/leaves`;
+    console.log('Target URL:',url);
+    let postData = new FormData();
+    /*postData.append('LeaveApplicationType',this.line.LeaveApplicationType);
+    postData.append('EmplId',this.line.EmplId);
+    postData.append('RequestedBy','0');
+    postData.append('ScheduledLeaveDate',this.line.ScheduledLeaveDate.toJSON());
+    postData.append('ScheduledReturnDate',this.line.ScheduledReturnDate.toJSON());
+    postData.append('ApprovalStatus',this.line.ApprovalStatus);
+    postData.append('ExitVisaType',this.line.ExitVisaType);
+    postData.append('Comments',this.line.Comments);
+    postData.append('CommentsApproval',this.line.CommentsApproval);
+    postData.append('TicketReservationRequired',(this.line.TicketReservationRequired?'true':'false'));
+    postData.append('LeaveEncashment',(this.line.LeaveEncashment?'true':'false'));
+    postData.append('NeedExitVisa',(this.line.NeedExitVisa?'true':'false'));*/
+
+    this.http.post(url,this.line).subscribe(data =>
+      {
+        console.log("Post new leave line result:",data);
+      });
     
+
   }
 
 

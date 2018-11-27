@@ -14,6 +14,8 @@ import { LoadingController,Loading } from 'ionic-angular';
 import { AppType,AppStatus,VisaType } from '../../app/models/enums';
 import {LeaveappLinePage} from '../leaveapp-line/leaveapp-line';
 import { LeaveCode } from '../../app/models/leavecode';
+import { text } from '@angular/core/src/render3/instructions';
+import { ApproveLine } from '../../app/models/ApproveLine';
 
 
 
@@ -63,24 +65,25 @@ export class LeaveappPage implements OnInit{
   leaveCodeList:Array<LeaveCode>;
   loader:Loading = this.loadingCtrl.create({
     content: "Please wait...",
-    duration: 3000
+    duration: 30000
   });
     
   onItemClicked( item:LeaveApp){
     console.log(`Id :${item.ApplicationId} was clicked`);
-    this.presentConfirm();
+    this.presentActionListConfirm(item.WFActionList);
   }
   onAddItemClicked(){
     
     let  newItem:LeaveApp=new LeaveApp();
     //Initalization
-    newItem.CreatedDateTime=new Date();
-    newItem.ApprovalStatus=AppStatus.Open;
-    newItem.LeaveApplicationType=AppType.Leave;
-    newItem.ExitVisaType=VisaType.None;
-    newItem.ScheduledLeaveDate=new Date();
-    newItem.ScheduledReturnDate=new Date();
-    this.leaveCodeList = this.global.LeaveCodes;
+    newItem.EmplId                = this.global.EMPL_ID;
+    newItem.CreatedDateTime       = new Date();
+    newItem.ApprovalStatus        = AppStatus.Open;
+    newItem.LeaveApplicationType  = AppType.Leave;
+    newItem.ExitVisaType          = VisaType.None;
+    newItem.ScheduledLeaveDate    = new Date();
+    newItem.ScheduledReturnDate   = new Date();
+    this.leaveCodeList            = this.global.LeaveCodes;
     console.log(`Create new leave : ${newItem} \n New leave CodesList: ${this.leaveCodeList}`);
     this.navCtrl.push(LeaveappLinePage,{
       Operation:"NEW",
@@ -91,7 +94,7 @@ export class LeaveappPage implements OnInit{
 
  getLeaves(_empl:Employee){
    
-  let fullURL:string = `${this.global.URL}/leaves?emplid=${_empl.PersonnelNumber}&includeSubordinates=false`;
+  let fullURL:string = `${this.global.URL}/leaves?emplid=${_empl.EmplId}&includeSubordinates=false`;
   console.log(`URL : ${fullURL}`);
   this.loader.present( );
   this.http.get(fullURL)
@@ -106,7 +109,7 @@ export class LeaveappPage implements OnInit{
         },err =>{
         console.log(`Error happend when calling API :\n ${err}\n 
                      URL: ${this.connSettings.Url} \n 
-                     EmplId:${_empl.PersonnelNumber} \n
+                     EmplId:${_empl.EmplId} \n
                      Name: ${_empl.Name}`);    
      
        });
@@ -124,7 +127,7 @@ export class LeaveappPage implements OnInit{
     inputs:[
       {
         name:"commentsapproval",
-        placeholder:"Approcal comments"
+        placeholder:"Approver comments"
       }
     ],
     buttons: [
@@ -150,7 +153,73 @@ export class LeaveappPage implements OnInit{
       }
     ]
   });
+  
   alert.present();
 } 
+
+presentActionListConfirm(leaveApp:LeaveApp){
+
+  let appAction:ApproveLine=new ApproveLine();
+  appAction.WFLineId = leaveApp.WFLineId;
+
+  let alert = this.alertCtrl.create({
+    title: `<ion-label color="danger">Approve leave application</ion-label>`,
+    message: 'Please approve or reject this leave application ,You can write comments for selected action?',
+    inputs:[
+      {
+        name:"commentsapproval",
+        placeholder:"Approver comments"
+      }
+    ],
+    buttons: [
+   
+    ]
+  });
+  
+  let actList:string[]=leaveApp.WFActionList.split(" ");
+  actList.forEach(element => {
+  if(element === "Approving"){
+    alert.addButton({
+      text:element,
+      handler:(data)=>{
+          console.log('Approving');
+          appAction.Comments = data.commentsapproval.ToStr();
+          appAction.UserStatusSelection=element;
+          
+      }
+    });
+  }
+
+  if(element === "Rejected"){
+    alert.addButton({
+      text:element,
+      handler:(data)=>{
+          console.log('Rejected');
+      }
+    });
+  }
+
+  if(element === "ReportAsReady"){
+    alert.addButton({
+      text:element,
+      handler:(data)=>{
+          console.log('ReportAsReady');
+      }
+    });
+  }
+  
+
+  }); 
+
+  alert.addButton({
+    text:"Cancel",
+    role:"cancel",
+    handler:(data)=>{
+      console.log("Canceled !!!");
+    }
+  });
+alert.present();
+
+}
 
 }

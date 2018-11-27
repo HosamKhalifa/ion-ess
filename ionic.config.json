@@ -7,6 +7,6 @@
   "proxies": [
     {
       "path": "/api",
-      "proxyUrl": "http://77.78.103.112:3001/ZingApi/api"
+      "proxyUrl": "http://172.111.192.141:3001/ZingApi/api"
     }]
 }

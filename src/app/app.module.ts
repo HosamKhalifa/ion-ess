@@ -18,6 +18,7 @@ import{LeaveappLinePage} from '../pages/leaveapp-line/leaveapp-line';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GlobalProvider } from '../providers/global/global';
+import { LeaveBalPage } from '../pages/leave-bal/leave-bal';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { GlobalProvider } from '../providers/global/global';
     ListPage,
     SetupPage,
     LeaveappPage,
-    LeaveappLinePage
+    LeaveappLinePage,
+    LeaveBalPage
     
     
   ],
@@ -45,7 +47,8 @@ import { GlobalProvider } from '../providers/global/global';
     ListPage,
     SetupPage,
     LeaveappPage,
-    LeaveappLinePage
+    LeaveappLinePage,
+    LeaveBalPage
   ],
   providers: [
     StatusBar,

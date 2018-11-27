@@ -34,14 +34,19 @@
     <ion-item>
         <ion-label floating color="primary">Company Id</ion-label>
         <ion-input [(ngModel)]="connSettings.CompId" type="text"></ion-input>
-      </ion-item>
-
-    <ion-item>
-      
-      <button ion-button color="secondary" block on-click='Test_onClick()' >Test</button>
     </ion-item>
     <ion-item>
-      <button ion-button color="primary" block on-click='Save_onClick()'>Save</button>
+     <p style="align-items: center">
+      <img src="data:image/jpeg;base64,{{currentEmployee.EmplImg}}" />
+    </p>
+    </ion-item>
+    
+    <ion-item>
+      
+      <button ion-button round color="secondary" block on-click='Test_onClick()' >Test</button>
+    </ion-item>
+    <ion-item>
+      <button ion-button round color="primary" block on-click='Save_onClick()'>Save</button>
     </ion-item>
   
   </ion-list>

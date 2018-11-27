@@ -16,6 +16,7 @@ import { LeaveappPage }from '../pages/leaveapp/leaveapp';
 import {ERequestPage} from '../pages/e-request/e-request';
 import {OvertimePage} from '../pages/overtime/overtime';
 import {HoursleavePage} from '../pages/hoursleave/hoursleave';
+import { LeaveBalPage } from '../pages/leave-bal/leave-bal';
 
 
 @Component({
@@ -39,7 +40,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage ,icon:'home',color:"amber"},
-      { title: 'My Leave balance', component: ListPage ,icon:'list-box',color:"primary"},
+      { title: 'My Leave balance', component: LeaveBalPage ,icon:'list-box',color:"primary"},
       
       {title:'My Leaves',component:LeaveappPage,icon:'log-out',color:"vodafone"},
       {title:'General Purpose E-Request',component:ERequestPage,icon:'browsers',color:"secondary"},

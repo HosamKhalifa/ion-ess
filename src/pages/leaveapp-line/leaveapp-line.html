@@ -15,11 +15,8 @@
       <form novalidate (ngSubmit)="post()" [formGroup]="lineFG"> 
         <ion-item>
           <ion-label >Leave code:</ion-label>
-          <ion-select formControlName="DefaultLeaveCode" >
-            <ion-option value="Absence">Absence </ion-option>
-            <ion-option value="AbsenceWP">AbsenceWP </ion-option>
-            <ion-option value="Emergency">Emergency </ion-option>
-            <ion-option value="Exam">Exam </ion-option>
+          <ion-select formControlName="DefaultLeaveCode" [(ngModel)]="line.DefaultLeaveCode" >
+            <ion-option *ngFor="let item of leaveCodeList" [value]="item.CodeId">{{item.Description}}</ion-option>
           </ion-select>
         </ion-item>
    
