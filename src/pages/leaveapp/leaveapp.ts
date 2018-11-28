@@ -70,7 +70,7 @@ export class LeaveappPage implements OnInit{
     
   onItemClicked( item:LeaveApp){
     console.log(`Id :${item.ApplicationId} was clicked`);
-    this.presentActionListConfirm(item.WFActionList);
+    this.presentActionListConfirm(item);
   }
   onAddItemClicked(){
     
@@ -162,6 +162,8 @@ presentActionListConfirm(leaveApp:LeaveApp){
   let appAction:ApproveLine=new ApproveLine();
   appAction.WFLineId = leaveApp.WFLineId;
 
+         
+
   let alert = this.alertCtrl.create({
     title: `<ion-label color="danger">Approve leave application</ion-label>`,
     message: 'Please approve or reject this leave application ,You can write comments for selected action?',
@@ -178,36 +180,21 @@ presentActionListConfirm(leaveApp:LeaveApp){
   
   let actList:string[]=leaveApp.WFActionList.split(" ");
   actList.forEach(element => {
-  if(element === "Approving"){
+  if(element === "Approving" || element === "Rejected" || element === "ReportAsReady"){
     alert.addButton({
       text:element,
       handler:(data)=>{
-          console.log('Approving');
-          appAction.Comments = data.commentsapproval.ToStr();
-          appAction.UserStatusSelection=element;
-          
+                          console.log(`${element} was selected`);
+                          appAction.Comments = data.commentsapproval;
+                          appAction.UserStatusSelection=element;
+                          appAction.WFLineId = leaveApp.WFLineId;
+                          
+                           this.putAction(appAction,leaveApp);
+    
       }
     });
   }
-
-  if(element === "Rejected"){
-    alert.addButton({
-      text:element,
-      handler:(data)=>{
-          console.log('Rejected');
-      }
-    });
-  }
-
-  if(element === "ReportAsReady"){
-    alert.addButton({
-      text:element,
-      handler:(data)=>{
-          console.log('ReportAsReady');
-      }
-    });
-  }
-  
+ 
 
   }); 
 
@@ -220,6 +207,21 @@ presentActionListConfirm(leaveApp:LeaveApp){
   });
 alert.present();
 
+}
+
+putAction(appAction:ApproveLine,leaveApp:LeaveApp){
+  
+ 
+        
+  console.log('Put new:',appAction); 
+  var url = `${this.global.URL}/leaves?id=${leaveApp.RecId}`;
+  console.log('Target URL using HttpPut:',url);
+  
+  
+  this.http.put(url,appAction).subscribe(data =>
+    {
+      console.log("Put new approve action:",data);
+    });
 }
 
 }
