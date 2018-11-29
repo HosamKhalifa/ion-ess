@@ -8,7 +8,8 @@ import{AlertController} from 'ionic-angular';
 import {Http} from '@angular/http';
 import { Storage } from '@ionic/storage';
 import * as Constants from '../../app/models/constants';
-
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { LoadingController,Loading } from 'ionic-angular';
 
 
 
@@ -63,15 +64,22 @@ export class SetupPage implements OnInit{
               public navParams: NavParams,
               private http:Http,
               private alertCtrl:AlertController,
+              public loadingCtrl: LoadingController,
               private storage: Storage,
-              public singleton:SingletonService) {
+              public singleton:SingletonService,
+              private camera: Camera) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SetupPage');
   }
+  
   connSettings:ConnSettings; 
   currentEmployee:Employee=new Employee();
+  loader:Loading = this.loadingCtrl.create({
+    content: "Please wait...",
+    duration: 30000
+  });
   
   Test_onClick(){
     console.log(`Starting test <br> ${this.connSettings.Url} <br> 
@@ -102,10 +110,11 @@ export class SetupPage implements OnInit{
   
        let fullURL:string = `${connSettings.Url}/employees/${connSettings.UserId}`;
         console.log(`URL : ${fullURL}`);
-
+        this.loader.present( );
         this.http.get(fullURL).map(res => res.json()).subscribe(data => {
     
           this.currentEmployee=data;  
+          this.loader.dismiss();
             let alert = this.alertCtrl.create({
                 title:"Connection test",
                 subTitle:`connect to Url : ${fullURL} return <br> 
@@ -123,6 +132,47 @@ export class SetupPage implements OnInit{
 
 
        
+}
+
+takeEmplPicture(){
+  const options: CameraOptions = {
+    quality: 70,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE,
+    allowEdit:true,
+    correctOrientation: true,
+    saveToPhotoAlbum:true
+  }
+
+  this.camera.getPicture(options).then((imageData) => {
+    // imageData is either a base64 encoded string or a file URI
+    // If it's base64 (DATA_URL):
+    let base64Image = 'data:image/jpeg;base64,' + imageData;
+    
+    this.currentEmployee.EmplImg = base64Image;
+    this.storage.set(Constants.SETTINGS_EMPL,this.currentEmployee).then(()=>{
+      let confirmAlert =  this.alertCtrl.create({
+        title:'My photo saving',
+        message:'Picture was saved to local storage',
+        buttons:[
+          {text:'Close',role:'cancel'}
+        ]
+      });
+
+      confirmAlert.present();
+
+    });
+
+    console.log(`Photo taken by user is ${this.currentEmployee.EmplImg}  `);
+
+   }, (err) => {
+    // Handle error
+    console.log(err);
+   });
+
+
+
 }
 
 

@@ -19,7 +19,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GlobalProvider } from '../providers/global/global';
 import { LeaveBalPage } from '../pages/leave-bal/leave-bal';
-
+import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -56,7 +56,8 @@ import { LeaveBalPage } from '../pages/leave-bal/leave-bal';
     SingletonService,
     {provide:CrudApiProvider, useClass:CrudApiProvider },
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    GlobalProvider
+    GlobalProvider,
+    Camera
     
   ]
 })
