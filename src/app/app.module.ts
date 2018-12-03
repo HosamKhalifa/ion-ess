@@ -20,6 +20,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { GlobalProvider } from '../providers/global/global';
 import { LeaveBalPage } from '../pages/leave-bal/leave-bal';
 import { Camera } from '@ionic-native/camera';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { Camera } from '@ionic-native/camera';
     {provide:CrudApiProvider, useClass:CrudApiProvider },
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalProvider,
-    Camera
+    Camera,
+    FileTransfer,File
     
   ]
 })

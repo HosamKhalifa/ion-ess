@@ -5,7 +5,8 @@ export class Employee{
                 public EmplCompany:string='',
                 public BranchName:string='',
                 public FullName:string='',
-                public EmplImg:any=null ){
+                public EmplImg:any=null ,
+                public LeaveBalance:number=0){
 
     }
 

@@ -5,13 +5,13 @@ import{SingletonService} from '../../services/singleton/singleton';
 import 'rxjs/add/operator/map';
 import {Employee} from '../../app/models/employee';
 import{AlertController} from 'ionic-angular';
-import {Http} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 import { Storage } from '@ionic/storage';
 import * as Constants from '../../app/models/constants';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { LoadingController,Loading } from 'ionic-angular';
-
-
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 
 @IonicPage()
 @Component({
@@ -67,7 +67,9 @@ export class SetupPage implements OnInit{
               public loadingCtrl: LoadingController,
               private storage: Storage,
               public singleton:SingletonService,
-              private camera: Camera) {
+              private camera: Camera,
+              private transfer: FileTransfer, 
+              private file: File) {
   }
 
   ionViewDidLoad() {
@@ -97,7 +99,11 @@ export class SetupPage implements OnInit{
     });
     this.storage.set(Constants.SETTINGS_USERID,this.connSettings.UserId);
     this.storage.set(Constants.SETTINGS_USERPWD,this.connSettings.UserPwd);
-    this.storage.set(Constants.SETTINGS_EMPL,this.currentEmployee);
+    this.storage.set(Constants.SETTINGS_EMPL,this.currentEmployee).then(() =>
+    {
+      console.log("Starting upload employee settings to server ...")
+      this.upLoadEmplData(this.currentEmployee);
+    });
     this.storage.set(Constants.SETTINGS_COMP_ID,this.connSettings.CompId);
     this.storage.set(Constants.SETTINGS_LOGO,this.connSettings.CompImage);
 
@@ -149,18 +155,12 @@ takeEmplPicture(){
     // imageData is either a base64 encoded string or a file URI
     // If it's base64 (DATA_URL):
     let base64Image = 'data:image/jpeg;base64,' + imageData;
-    
+    console.log('ImageContent :\n');
+    console.log(base64Image);
+    let emplPutUrl = `${this.connSettings.Url}/employees/${this.currentEmployee.EmplId}`;
     this.currentEmployee.EmplImg = base64Image;
     this.storage.set(Constants.SETTINGS_EMPL,this.currentEmployee).then(()=>{
-      let confirmAlert =  this.alertCtrl.create({
-        title:'My photo saving',
-        message:'Picture was saved to local storage',
-        buttons:[
-          {text:'Close',role:'cancel'}
-        ]
-      });
-
-      confirmAlert.present();
+       this.upLoadEmplData(this.currentEmployee);
 
     });
 
@@ -175,6 +175,29 @@ takeEmplPicture(){
 
 }
 
-
+upLoadEmplData(emp:Employee)
+{
+  let emplDataUrl= `${this.connSettings.Url}/Employees/${emp.EmplId}`;
+  console.log(`Upload link is : ${emplDataUrl}`);
+  console.log(emp);
+  this.http.put(emplDataUrl,
+                emp,
+                {
+                  headers: new Headers({ 'Content-Type': 'application/json' })
+                }
+                ).subscribe(data =>
+                {
+                    console.log("Upload using new employee picture HttpPut  :",data);
+                    let confirmAlert =  this.alertCtrl.create({
+                      title:'My photo saving',
+                      message:'Picture was saved to local storage',
+                      buttons:[
+                        {text:'Close',role:'cancel'}
+                      ]
+                    });
+              
+                    confirmAlert.present();
+                });  
+}
 
 }
