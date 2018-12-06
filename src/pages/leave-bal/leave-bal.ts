@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Employee } from '../../app/models/employee';
 import{GlobalProvider} from '../../providers/global/global';
 import { LoadingController,Loading } from 'ionic-angular';
-import {Http} from '@angular/http';
+import {Http,Headers} from '@angular/http';
 /**
  * Generated class for the LeaveBalPage page.
  *
@@ -38,7 +38,9 @@ export class LeaveBalPage implements OnInit{
     let fullURL:string = `${this.global.URL}/LeaveBal/${emplId}`;
     console.log(`URL : ${fullURL}`);
     this.loader.present( );
-    this.http.get(fullURL)
+    let headers = new Headers();
+    headers.append('Authorization', 'Basic ' + btoa(`${this.global.connSettings.UserId}:${this.global.connSettings.UserPwd}`));
+    this.http.get(fullURL,{headers:headers})
         .map(res => res.json())
         .subscribe(data => {
            this.leaveBal = Math.trunc( data );

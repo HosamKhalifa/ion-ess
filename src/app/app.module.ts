@@ -12,27 +12,27 @@ import { SingletonService } from '../services/singleton/singleton';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-import{SetupPage}from '../pages/setup/setup';
-import {LeaveappPage} from '../pages/leaveapp/leaveapp';
-import{LeaveappLinePage} from '../pages/leaveapp-line/leaveapp-line';
+import{SetupPageModule}from '../pages/setup/setup.module';
+import {LeaveappPageModule} from '../pages/leaveapp/leaveapp.module';
+import{LeaveappLinePageModule} from '../pages/leaveapp-line/leaveapp-line.module';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GlobalProvider } from '../providers/global/global';
-import { LeaveBalPage } from '../pages/leave-bal/leave-bal';
+import {LeaveBalPageModule} from '../pages/leave-bal/leave-bal.module'
+import { TakePicPageModule } from '../pages/take-pic/take-pic.module';
+
 import { Camera } from '@ionic-native/camera';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
+
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
-    SetupPage,
-    LeaveappPage,
-    LeaveappLinePage,
-    LeaveBalPage
-    
+    ListPage   
     
   ],
   imports: [
@@ -40,17 +40,18 @@ import { File } from '@ionic-native/file';
     HttpModule,    
     HttpClientModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    LeaveBalPageModule,
+    LeaveappPageModule,
+    LeaveappLinePageModule,
+    SetupPageModule,
+    TakePicPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
-    SetupPage,
-    LeaveappPage,
-    LeaveappLinePage,
-    LeaveBalPage
+    ListPage
   ],
   providers: [
     StatusBar,
@@ -60,7 +61,7 @@ import { File } from '@ionic-native/file';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalProvider,
     Camera,
-    FileTransfer,File
+    FileTransfer,File,FilePath,Transfer
     
   ]
 })

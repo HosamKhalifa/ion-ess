@@ -12,6 +12,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { LoadingController,Loading } from 'ionic-angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { TakePicPage } from '../take-pic/take-pic';
 
 @IonicPage()
 @Component({
@@ -117,7 +118,9 @@ export class SetupPage implements OnInit{
        let fullURL:string = `${connSettings.Url}/employees/${connSettings.UserId}`;
         console.log(`URL : ${fullURL}`);
         this.loader.present( );
-        this.http.get(fullURL).map(res => res.json()).subscribe(data => {
+        let headers = new Headers();
+        headers.append('Authorization', 'Basic ' + btoa(`${this.connSettings.UserId}:${this.connSettings.UserPwd}`));
+        this.http.get(fullURL,{headers:headers}).map(res => res.json()).subscribe(data => {
     
           this.currentEmployee=data;  
           this.loader.dismiss();
@@ -140,9 +143,15 @@ export class SetupPage implements OnInit{
        
 }
 
+takeEmplPicturePage(){
+  this.navCtrl.push(TakePicPage,{
+    data:this.currentEmployee.EmplId
+  })
+}
+
 takeEmplPicture(){
   const options: CameraOptions = {
-    quality: 70,
+    quality: 30,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
     mediaType: this.camera.MediaType.PICTURE,
@@ -156,8 +165,8 @@ takeEmplPicture(){
     // If it's base64 (DATA_URL):
     let base64Image = 'data:image/jpeg;base64,' + imageData;
     console.log('ImageContent :\n');
-    console.log(base64Image);
-    let emplPutUrl = `${this.connSettings.Url}/employees/${this.currentEmployee.EmplId}`;
+    console.log(`base64Image lenght is :${base64Image.length}`);
+    
     this.currentEmployee.EmplImg = base64Image;
     this.storage.set(Constants.SETTINGS_EMPL,this.currentEmployee).then(()=>{
        this.upLoadEmplData(this.currentEmployee);
@@ -177,15 +186,11 @@ takeEmplPicture(){
 
 upLoadEmplData(emp:Employee)
 {
-  let emplDataUrl= `${this.connSettings.Url}/Employees/${emp.EmplId}`;
+  let emplDataUrl= `${this.connSettings.Url}/Employees`;
   console.log(`Upload link is : ${emplDataUrl}`);
   console.log(emp);
-  this.http.put(emplDataUrl,
-                emp,
-                {
-                  headers: new Headers({ 'Content-Type': 'application/json' })
-                }
-                ).subscribe(data =>
+    
+  this.http.post(emplDataUrl,emp).subscribe(data =>
                 {
                     console.log("Upload using new employee picture HttpPut  :",data);
                     let confirmAlert =  this.alertCtrl.create({

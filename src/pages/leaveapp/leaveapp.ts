@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, DateTime } from 'ionic-angular';
 import {LeaveApp} from '../../app/models/leaveapp';
 import {Employee} from '../../app/models/employee';
 import * as Constants from '../../app/models/constants';
-import {Http} from '@angular/http';
+import {Http,Headers} from '@angular/http';
 import { Storage } from '@ionic/storage';
 import{AlertController} from 'ionic-angular';
 import{GlobalProvider} from '../../providers/global/global';
@@ -97,7 +97,9 @@ export class LeaveappPage implements OnInit{
   let fullURL:string = `${this.global.URL}/leaves?emplid=${_empl.EmplId}&includeSubordinates=false`;
   console.log(`URL : ${fullURL}`);
   this.loader.present( );
-  this.http.get(fullURL)
+  let headers = new Headers();
+  headers.append('Authorization', 'Basic ' + btoa(`${this.global.connSettings.UserId}:${this.global.connSettings.UserPwd}`));
+  this.http.get(fullURL,{headers:headers})
       .map(res => res.json())
       .subscribe(data => {
          
@@ -217,8 +219,9 @@ putAction(appAction:ApproveLine,leaveApp:LeaveApp){
   var url = `${this.global.URL}/leaves?id=${leaveApp.RecId}`;
   console.log('Target URL using HttpPut:',url);
   
-  
-  this.http.put(url,appAction).subscribe(data =>
+  let headers = new Headers();
+  headers.append('Authorization', 'Basic ' + btoa(`${this.global.connSettings.UserId}:${this.global.connSettings.UserPwd}`));
+  this.http.put(url,appAction,{headers:headers}).subscribe(data =>
     {
       console.log("Put new approve action:",data);
     });

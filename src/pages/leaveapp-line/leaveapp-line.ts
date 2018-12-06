@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormGroup,FormControl,Validator, FormBuilder, Validators} from '@angular/forms';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { LeaveApp } from '../../app/models/leaveapp';
-import{Http} from '@angular/http';
+import{Http,Headers} from '@angular/http';
 import { LeaveCode } from '../../app/models/leavecode';
 import { AppType,AppStatus,VisaType } from '../../app/models/enums';
 import {GlobalProvider} from '../../providers/global/global';
@@ -105,8 +105,9 @@ export class LeaveappLinePage implements OnInit {
     postData.append('TicketReservationRequired',(this.line.TicketReservationRequired?'true':'false'));
     postData.append('LeaveEncashment',(this.line.LeaveEncashment?'true':'false'));
     postData.append('NeedExitVisa',(this.line.NeedExitVisa?'true':'false'));*/
-
-    this.http.post(url,this.line).subscribe(data =>
+    let headers = new Headers();
+    headers.append('Authorization', 'Basic ' + btoa(`${this.global.connSettings.UserId}:${this.global.connSettings.UserPwd}`));
+    this.http.post(url,this.line,{headers:headers}).subscribe(data =>
       {
         console.log("Post new leave line result:",data);
       });
