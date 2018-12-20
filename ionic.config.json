@@ -3,10 +3,5 @@
   "integrations": {
     "cordova": {}
   },
-  "type": "ionic-angular",
-  "proxies": [
-    {
-      "path": "/api",
-      "proxyUrl": "http://172.111.192.141:3001/ZingApi/api"
-    }]
+  "type": "ionic-angular" 
 }

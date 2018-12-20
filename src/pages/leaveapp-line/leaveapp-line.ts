@@ -91,7 +91,7 @@ export class LeaveappLinePage implements OnInit {
     //Validate all relative fields value
     console.log('Post new:',this.lineFG.value); 
     var url = `${this.global.URL}/leaves`;
-    console.log('Target URL:',url);
+    console.log('Target Posting URL:',url);
     let postData = new FormData();
     /*postData.append('LeaveApplicationType',this.line.LeaveApplicationType);
     postData.append('EmplId',this.line.EmplId);
@@ -109,9 +109,10 @@ export class LeaveappLinePage implements OnInit {
     headers.append('Authorization', 'Basic ' + btoa(`${this.global.connSettings.UserId}:${this.global.connSettings.UserPwd}`));
     this.http.post(url,this.line,{headers:headers}).subscribe(data =>
       {
-        console.log("Post new leave line result:",data);
+        console.log("Post new leave line result:",data,'Headers:',headers.toJSON);
+            
       });
-    
+      this.navCtrl.pop();
 
   }
 

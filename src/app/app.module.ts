@@ -20,6 +20,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { GlobalProvider } from '../providers/global/global';
 import {LeaveBalPageModule} from '../pages/leave-bal/leave-bal.module'
 import { TakePicPageModule } from '../pages/take-pic/take-pic.module';
+import{ LocalNotifications } from '@ionic-native/local-notifications'
 
 import { Camera } from '@ionic-native/camera';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
@@ -57,6 +58,7 @@ import { FilePath } from '@ionic-native/file-path';
     StatusBar,
     SplashScreen,
     SingletonService,
+    LocalNotifications,
     {provide:CrudApiProvider, useClass:CrudApiProvider },
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalProvider,
